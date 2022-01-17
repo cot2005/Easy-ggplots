@@ -3,7 +3,7 @@ Functions for making simple ggplots from 3 and 4 variable datasets. Each variabl
 
 Example:
 ```
-inputFile, 
+inputFile = file name for input data file
 xval, yval, shape, fill = column number in the input data containing each variable to be plotted.
 sep = separator for the input datafile
 outputName = output graph name "myPlot.pdf"
