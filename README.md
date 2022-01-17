@@ -3,5 +3,14 @@ Functions for making simple ggplots from 3 and 4 variable datasets. Each variabl
 
 Example:
 ```
+inputFile, 
+xval, yval, shape, fill = column number in the input data containing each variable to be plotted.
+sep = separator for the input datafile
+outputName = output graph name "myPlot.pdf"
+height = graph height
+width = graph width
+facet = boolean to facet grid the graphs
+
+
 ggEasy.boxplot4("testData.csv", xval = 3, yval = 6, shape = 2, fill = 4, facet = FALSE)
 ```
