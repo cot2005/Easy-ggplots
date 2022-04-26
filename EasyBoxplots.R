@@ -6,9 +6,9 @@
 
 library("ggplot2")
 
-ggEasy.boxplot<-function(inputFile, xval = 1, yval = 2, shape = NULL, fill = NULL, sep = ",", angle.X = TRUE, 
-                          box.width = 1, point.size = 2.5,
-                          outputName = "boxPlot.pdf", height = 5, width = 6, facet = FALSE) {
+ggEasy.boxplot<-function(inputFile, xval = 1, yval = 2, shape = NULL, fill = NULL, facetGroup = NULL, sep = ",", 
+                         angle.X = TRUE, box.width = 1, point.size = 2.5,
+                          outputName = "boxPlot.pdf", height = 5, width = 6) {
   df <- read.csv(inputFile, stringsAsFactors = T, sep = sep, check.names = F)
   header <- colnames(df)
   for (i in c(xval, shape, fill)) {
@@ -40,8 +40,8 @@ ggEasy.boxplot<-function(inputFile, xval = 1, yval = 2, shape = NULL, fill = NUL
   if (angle.X == TRUE) {   # angles X axis labels
     g <- g + theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
   }
-  if (facet == TRUE && is.null(fill) == FALSE) {   # adds facet wrapper
-    g <- g + facet_grid(cols = vars(df[,fill]))
+  if (is.null(facetGroup) == FALSE) {   # adds facet wrapper
+    g <- g + facet_wrap(~get(colnames(df)[facetGroup]))))
   }
   print(g)
   ggsave(outputName, height = height, width = width)
