@@ -1,4 +1,9 @@
-library(ggplot2)
+# author: Colin Tang
+# simple function to make histogram plots from csv's (default) where
+# each parameter number defines the column for the value.
+#
+
+library("ggplot2")
 
 ggEasy.histogram<-function(inputFile, xval = 1, yaxis = "count", sep = ",", binNum = 30, graphColor = "#46ACC8",outputName = "HistogramPlot.pdf", height = 5, width = 7) {
   inputData <- read.csv(inputFile, sep = sep, header = T)
