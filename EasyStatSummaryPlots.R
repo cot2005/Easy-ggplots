@@ -44,7 +44,7 @@ ggEasy.barplot.stat<-function(df, xval = 1, yval = 2, color = 3, shape = NULL, e
   if (errortype == "sd") {
     g <- g + stat_summary(fun.data=mean_sdl, position=position_dodge(error.width), geom="errorbar", width = error.width/2, alpha = alpha, color = "black")
   } else if (errortype == "sem") {
-    g <- g + stat_summary(fun.data=mean_se, position=position_dodge(error.width), geom="errorbar", width = error.width/2, alpha = alpha)
+    g <- g + stat_summary(fun.data=mean_se, position=position_dodge(error.width), geom="errorbar", width = error.width/2, alpha = alpha, color = "black")
   }
   if (allpoints == TRUE) {
     if (is.null(shape)) {
