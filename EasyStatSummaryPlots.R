@@ -46,13 +46,14 @@ ggEasy.barplot.stat<-function(df, xval = 1, yval = 2, color = 3, shape = NULL, e
   } else if (errortype == "sem") {
     g <- g + stat_summary(fun.data=mean_se, position=position_dodge(error.width), geom="errorbar", width = error.width/2, alpha = alpha)
   }
-  if (is.null(shape)) {
-    g <- g + geom_jitter(alpha = alpha, width = error.width/4, size = point.size)
-  } else {
-    g <- g + geom_point(aes(group = df[,color], shape = factor(df[,shape])), alpha = alpha, color = "black", size = point.size, 
-                        position=position_jitterdodge(dodge.width = error.width, jitter.width = error.width/2)) + 
-      guides(shape = guide_legend(title = colnames(df)[shape]))
-  }
+  if (allpoints == TRUE) {
+    if (is.null(shape)) {
+      g <- g + geom_jitter(alpha = alpha, width = error.width/4, size = point.size)
+    } else {
+      g <- g + geom_point(aes(group = df[,color], shape = factor(df[,shape])), alpha = alpha, color = "black", size = point.size, 
+                          position=position_jitterdodge(dodge.width = error.width, jitter.width = error.width/2)) + 
+        guides(shape = guide_legend(title = colnames(df)[shape]))
+    }
   g <- g + guides(fill = guide_legend(title = colnames(df)[color]), color = "none") + 
     labs(x = colnames(df)[xval], y = colnames(df)[yval]) + theme_bw() +
     scale_color_manual(values = wes_palette(wespalette, length(unique(df[,color], type = "continuous")))) + 
