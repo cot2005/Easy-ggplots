@@ -8,7 +8,8 @@ library(ggplot2)
 library(wesanderson)
 
 ggEasy.scatter.stat<-function(df, xval = 1, yval = 2, color = 3, errortype = "sd", connectLine = FALSE, 
-                              error.width = 0.05, line.size = 0.5, point.size = 1,alpha = 0.8, wespalette = "Darjeeling1",
+                              error.width = 0.05, line.size = 0.5, point.size = 1,alpha = 0.8, 
+                              palette = wes_palette("Darjeeling1", length(unique(df[,color])), type = "continuous"),
                               print = FALSE, print.width = 8, print.height = 6) {
   # flexible inputs
   headers <- colnames(df)
@@ -33,7 +34,7 @@ ggEasy.scatter.stat<-function(df, xval = 1, yval = 2, color = 3, errortype = "sd
   # adds theme settings
   g <- g + guides(color = guide_legend(title = colnames(df)[color])) + 
     labs(x = colnames(df)[xval], y = colnames(df)[yval]) + theme_bw() +
-    scale_color_manual(values = wes_palette(wespalette, length(unique(df[,color])), type = "continuous"))
+    scale_color_manual(values = palette)
   if (print == TRUE) {
     ggsave("statBarPlot.pdf", plot = g, width = print.width, height = print.height)
   }
@@ -46,7 +47,7 @@ ggEasy.scatter.stat<-function(df, xval = 1, yval = 2, color = 3, errortype = "sd
 #
 
 ggEasy.barplot.stat<-function(df, xval = 1, yval = 2, color = 3, shape = NA, group = color, errortype = "sd", allpoints = T,
-                              error.width = 1, point.size = 1, alpha = 0.8, wespalette = "Darjeeling1",
+                              error.width = 1, point.size = 1, alpha = 0.8, palette = wes_palette("Darjeeling1", length(unique(df[,color])), type = "continuous"),
                               print = FALSE, print.width = 8, print.height = 6) {
   # flexible inputs
   headers <- colnames(df)
@@ -74,7 +75,7 @@ ggEasy.barplot.stat<-function(df, xval = 1, yval = 2, color = 3, shape = NA, gro
   }
   g <- g + guides(fill = guide_legend(title = colnames(df)[color]), color = "none") + 
     labs(x = colnames(df)[xval], y = colnames(df)[yval]) + theme_bw() +
-    scale_fill_manual(values = wes_palette(wespalette, length(unique(df[,color])), type = "continuous"))
+    scale_fill_manual(values = palette)
   if (print == TRUE) {
     ggsave("statBarPlot.pdf", plot = g, width = print.width, height = print.height)
   }
