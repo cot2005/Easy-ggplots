@@ -5,8 +5,6 @@
 
 library("ggplot2")
 
-#fill/group is limited to 5 groups
-
 ggEasy.scatter4<-function(inputFile, xval = 1, yval = 2, shape = 3, fill = 4, sep = ",", 
                           outputName = "scatterPlot.pdf", height = 5, width = 6, facet = FALSE) {
   df <- read.csv(inputFile, stringsAsFactors = T, sep = sep)
