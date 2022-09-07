@@ -6,11 +6,10 @@
 
 library(ggplot2)
 library(wesanderson)
-
 ggEasy.scatter.stat<-function(df, xval = 1, yval = 2, color = 3, errortype = "sd", connectLine = FALSE, 
-                              error.width = 0.05, line.size = 0.5, point.size = 1,alpha = 0.8, 
-                              palette = wes_palette("Darjeeling1", length(unique(df[,color])), type = "continuous"),
-                              print = FALSE, print.width = 8, print.height = 6) {
+                              error.width = 0.05, line.size = 0.5, point.size = 1,alpha = 0.8, palette = wes_palette("Darjeeling1", length(unique(df[,color])), type = "continuous"),
+                              print = FALSE, outputName = "statScatterPlot.pdf", print.width = 8, print.height = 6) {
+  df <- as.data.frame(df)
   # flexible inputs
   headers <- colnames(df)
   xval <- ifelse(is.numeric(xval), xval, which(headers == xval))
@@ -36,7 +35,7 @@ ggEasy.scatter.stat<-function(df, xval = 1, yval = 2, color = 3, errortype = "sd
     labs(x = colnames(df)[xval], y = colnames(df)[yval]) + theme_bw() +
     scale_color_manual(values = palette)
   if (print == TRUE) {
-    ggsave("statBarPlot.pdf", plot = g, width = print.width, height = print.height)
+    ggsave(outputName, plot = g, width = print.width, height = print.height)
   }
   return(g)
 }
@@ -48,7 +47,9 @@ ggEasy.scatter.stat<-function(df, xval = 1, yval = 2, color = 3, errortype = "sd
 
 ggEasy.barplot.stat<-function(df, xval = 1, yval = 2, color = 3, shape = NA, group = color, errortype = "sd", allpoints = T,
                               error.width = 1, point.size = 1, alpha = 0.8, palette = wes_palette("Darjeeling1", length(unique(df[,color])), type = "continuous"),
-                              print = FALSE, print.width = 8, print.height = 6) {
+                              lineweight.bar = 0.5, lineweight.error = lineweight.bar,
+                              print = FALSE, outputName = "statBarPlot.pdf",print.width = 8, print.height = 6) {
+  df <- as.data.frame(df)
   # flexible inputs
   headers <- colnames(df)
   xval <- ifelse(is.numeric(xval), xval, which(headers == xval))
@@ -56,19 +57,19 @@ ggEasy.barplot.stat<-function(df, xval = 1, yval = 2, color = 3, shape = NA, gro
   color <- ifelse(is.numeric(color), color, which(headers == color))
   shape <- ifelse(is.numeric(shape), shape, which(headers == shape))
   
-  g <- ggplot(df,aes(x = factor(df[,xval]), y = df[,yval], color = factor(df[,color]), fill = factor(df[,color]), group = factor(df[,group]))) + 
-    stat_summary(fun="mean",position="dodge",geom="bar", width = error.width, alpha = alpha, color= "black", size = 0.5)
+  g <- ggplot(df,aes(x = factor(df[,xval]), y = as.numeric(df[,yval]), color = factor(df[,color]), fill = factor(df[,color]), group = factor(df[,group]))) + 
+    stat_summary(fun="mean",position="dodge",geom="bar", width = error.width, alpha = alpha, color= "black", size = lineweight.bar)
   if (errortype == "sd") {
-    g <- g + stat_summary(fun.data=mean_sdl, position=position_dodge(error.width), geom="errorbar", width = error.width/2, alpha = alpha, color = "black")
+    g <- g + stat_summary(fun.data=mean_sdl, position=position_dodge(error.width), geom="errorbar", width = error.width/2, alpha = alpha, color = "black", size = lineweight.error)
   } else if (errortype == "sem") {
-    g <- g + stat_summary(fun.data=mean_se, position=position_dodge(error.width), geom="errorbar", width = error.width/2, alpha = alpha, color = "black")
+    g <- g + stat_summary(fun.data=mean_se, position=position_dodge(error.width), geom="errorbar", width = error.width/2, alpha = alpha, color = "black", size = lineweight.error)
   }
   if (allpoints == TRUE) {
     if (is.na(shape)) {
-      g <- g + geom_point(aes(group = df[,color]), alpha = alpha, color = "black", size = point.size, 
+      g <- g + geom_point(aes(group = df[,group]), alpha = alpha, color = "black", size = point.size, 
                           position=position_jitterdodge(dodge.width = error.width, jitter.width = error.width/2))
     } else {
-      g <- g + geom_point(aes(group = df[,color], shape = factor(df[,shape])), alpha = alpha, color = "black", size = point.size, 
+      g <- g + geom_point(aes(group = df[,group], shape = factor(df[,shape])), alpha = alpha, color = "black", size = point.size, 
                           position=position_jitterdodge(dodge.width = error.width, jitter.width = error.width/2)) + 
         guides(shape = guide_legend(title = colnames(df)[shape]))
     }
@@ -77,7 +78,7 @@ ggEasy.barplot.stat<-function(df, xval = 1, yval = 2, color = 3, shape = NA, gro
     labs(x = colnames(df)[xval], y = colnames(df)[yval]) + theme_bw() +
     scale_fill_manual(values = palette)
   if (print == TRUE) {
-    ggsave("statBarPlot.pdf", plot = g, width = print.width, height = print.height)
+    ggsave(outputName, plot = g, width = print.width, height = print.height)
   }
   return(g)
 }
