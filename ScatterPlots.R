@@ -4,8 +4,9 @@
 #
 
 library("ggplot2")
+library("wesanderson")
 
-ggEasy.scatter<-function(df, xval = 1, yval = 2, shape = NA, shape.selection = 16,color = NA, color.selection = "black",facet = FALSE, point.size = 2.5, alpha = 0.8,
+ggEasy.scatter<-function(df, xval = 1, yval = 2, shape = NA, shape.selection = 16,color = NA, color.selection = "black",facet = NA, point.size = 2.5, alpha = 0.8,
                           palette = wes_palette("Darjeeling1", length(unique(df[,color])), type = "continuous"),
                           outputName = "scatterPlot.pdf", print = FALSE, print.height = 5, print.width = 6) {
   df <- as.data.frame(df)
@@ -31,6 +32,9 @@ ggEasy.scatter<-function(df, xval = 1, yval = 2, shape = NA, shape.selection = 1
     g <- g + geom_point(alpha = alpha, size = point.size) +
       guides(color = guide_legend(title=header[color]), shape = guide_legend(title=header[shape])) +
       scale_color_manual(values = palette)
+  }
+  if (!is.na(facet)) {
+    g <- g + facet_wrap(df[,facet])
   }
   if (print == TRUE) {
     ggsave(outputName, width = print.width, height = print.height)
