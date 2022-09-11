@@ -2,9 +2,15 @@ library(umap)
 library(ggplot2)
 library(wesanderson)
 
-ggEasy.umap<-function(df, labelColumn = ncol(df), point.size = 2, alpha = 0.8,
+ggEasy.umap<-function(df, labelColumn = ncol(df), point.size = 2, alpha = 0.8, subsample = NA, 
                       palette = wes_palette("Darjeeling1", numLabels, type = "continuous"),
                       print = FALSE, outputName = "umap.pdf", print.width = 7, print.height = 6) {
+  # subsets data
+  if (is.numeric(subsample)) {
+    subrows <- sample(1:nrow(df), subsample)
+    df <- df[subrows,]
+  }
+  
   # flexible inputs
   headers <- colnames(df)
   labelColumn <- ifelse(is.numeric(labelColumn), labelColumn, which(headers == labelColumn))
@@ -29,7 +35,7 @@ ggEasy.umap<-function(df, labelColumn = ncol(df), point.size = 2, alpha = 0.8,
   g <- ggEasy.scatter4(umap.df, xval = 1, yval = 2, color = 3, shape = 3, point.size = point.size, 
                        alpha = alpha, palette = palette) + coord_cartesian(xlim = c(umap.min,umap.max), ylim = c(umap.min,umap.max)) + 
     theme(panel.border = element_blank(), panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))
+          panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))
   if (print == TRUE) {
     ggsave(outputName, plot = g, width = print.width, height = print.height)
   }
