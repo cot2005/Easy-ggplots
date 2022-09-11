@@ -1,5 +1,5 @@
 # Easy-ggplots
-Functions for making simple ggplot objects and plots from multi-variable datasets. Each variable input is declared by the column integer or column name string containing the desired data to be plotted. The grouping is typically determined by the color parameter but can be modified with the group input. Shape and color variables can be NA'd to make simpler plots.
+Functions for making simple ggplot objects and plots from multi-variable datasets. Each variable input is declared by the column integer or column name string containing the desired data to be plotted. The grouping is typically determined by the color parameter but can be modified with the group input. Shape and color variables can be NA'd to make simpler plots. returns ggplot object that can be additionally modified.
 
 Example:
 ```
@@ -18,5 +18,5 @@ print.width = graph width
 facet = boolean to facet grid the graphs
 palette = palette of colors to use in graphs
 
-ggEasy.boxplot(iris, xval = 3, yval = 6, shape = 2, fill = 4, facet = FALSE)
+ggEasy.scatter(iris, xval = 1, yval = 2, shape = 5, color = 5)
 ```
