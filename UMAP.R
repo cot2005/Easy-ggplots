@@ -32,7 +32,7 @@ ggEasy.umap<-function(df, labelColumn = ncol(df), point.size = 2, alpha = 0.8, s
   umap.min <- min(combinedValues) * 0.9
   umap.min <- umap.min * ifelse(umap.min < 0, 1.1, 0.9)
   #performs plotting
-  g <- ggEasy.scatter4(umap.df, xval = 1, yval = 2, color = 3, shape = 3, point.size = point.size, 
+  g <- ggEasy.scatter(umap.df, xval = 1, yval = 2, color = 3, shape = 3, point.size = point.size, 
                        alpha = alpha, palette = palette) + coord_cartesian(xlim = c(umap.min,umap.max), ylim = c(umap.min,umap.max)) + 
     theme(panel.border = element_blank(), panel.grid.major = element_blank(),
           panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))
