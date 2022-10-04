@@ -91,7 +91,8 @@ ggEasy.barplot.stat<-function(df, xval = 1, yval = 2, color = NA, shape = NA, gr
                           position=position_jitter(width = error.width/6))
     } else if(is.na(shape) || is.na(group)) {
       g <- g + geom_point(aes(shape = factor(df[,shape])), alpha = alpha, color = "black", size = point.size, 
-                          position=position_jitterdodge(dodge.width = error.width, jitter.width = error.width/2))
+                          position=position_jitterdodge(dodge.width = error.width, jitter.width = error.width/2)) + 
+        guides(shape = guide_legend(title = colnames(df)[shape]))
     } else {
       g <- g + geom_point(aes(shape = factor(df[,shape])), alpha = alpha, color = "black", size = point.size, 
                           position=position_jitterdodge(dodge.width = error.width, jitter.width = error.width/2)) + 
