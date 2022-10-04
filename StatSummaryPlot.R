@@ -46,7 +46,7 @@ ggEasy.scatter.stat<-function(df, xval = 1, yval = 2, color = 3, errortype = "sd
 #
 
 ggEasy.barplot.stat<-function(df, xval = 1, yval = 2, color = 3, shape = NA, group = color, errortype = "sd", allpoints = T,
-                              error.width = 1, point.size = 1, alpha = 0.8, palette = wes_palette("Darjeeling1", length(unique(df[,color])), type = "continuous"),
+                              error.width = 1, point.size = 1, alpha = 0.8, palette = wes_palette("Darjeeling1", ncolor, type = "continuous"),
                               lineweight.bar = 0.5, lineweight.error = lineweight.bar,
                               print = FALSE, outputName = "statBarPlot.pdf",print.width = 8, print.height = 6) {
   df <- as.data.frame(df)
@@ -57,13 +57,33 @@ ggEasy.barplot.stat<-function(df, xval = 1, yval = 2, color = 3, shape = NA, gro
   color <- ifelse(is.numeric(color), color, which(headers == color))
   shape <- ifelse(is.numeric(shape), shape, which(headers == shape))
   
-  g <- ggplot(df,aes(x = factor(df[,xval]), y = as.numeric(df[,yval]), color = factor(df[,color]), fill = factor(df[,color]), group = factor(df[,group]))) + 
-    stat_summary(fun="mean",position="dodge",geom="bar", width = error.width, alpha = alpha, color= "black", size = lineweight.bar)
+  g <- ggplot(df,aes(x = factor(df[,xval]), y = as.numeric(df[,yval]))) + 
+    labs(x = colnames(df)[xval], y = colnames(df)[yval]) + theme_bw()
+  
+  # adds group
+  if (!is.na(group)) {
+    g <- g + aes(group = factor(df[,group])) 
+  }
+  # adds color and bars
+  if (!is.na(color)) {   
+    ncolor <- length(unique(df[,color]))
+    g <- g + aes(fill = factor(df[,color])) + 
+      stat_summary(fun="mean",position="dodge",geom="bar", width = error.width, alpha = alpha, 
+                   color= "black", size = lineweight.bar) +
+      guides(fill = guide_legend(title = colnames(df)[color])) + 
+      scale_fill_manual(values = palette)
+  } else {
+    ncolor <- 1
+    g <- g + stat_summary(fun="mean",position="dodge",geom="bar", width = error.width, alpha = alpha, 
+                          color= "black", fill = palette, size = lineweight.bar)
+  }
+  # adds errorbars
   if (errortype == "sd") {
     g <- g + stat_summary(fun.data=mean_sdl, position=position_dodge(error.width), geom="errorbar", width = error.width/2, alpha = alpha, color = "black", size = lineweight.error)
   } else if (errortype == "sem") {
     g <- g + stat_summary(fun.data=mean_se, position=position_dodge(error.width), geom="errorbar", width = error.width/2, alpha = alpha, color = "black", size = lineweight.error)
   }
+  # adds points
   if (allpoints == TRUE) {
     if (is.na(shape)) {
       g <- g + geom_point(aes(group = df[,group]), alpha = alpha, color = "black", size = point.size, 
@@ -74,9 +94,6 @@ ggEasy.barplot.stat<-function(df, xval = 1, yval = 2, color = 3, shape = NA, gro
         guides(shape = guide_legend(title = colnames(df)[shape]))
     }
   }
-  g <- g + guides(fill = guide_legend(title = colnames(df)[color]), color = "none") + 
-    labs(x = colnames(df)[xval], y = colnames(df)[yval]) + theme_bw() +
-    scale_fill_manual(values = palette)
   if (print == TRUE) {
     ggsave(outputName, plot = g, width = print.width, height = print.height)
   }
