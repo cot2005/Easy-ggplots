@@ -45,7 +45,7 @@ ggEasy.scatter.stat<-function(df, xval = 1, yval = 2, color = 3, errortype = "sd
 # sem = standard error of the mean
 #
 
-ggEasy.barplot.stat<-function(df, xval = 1, yval = 2, color = 3, shape = NA, group = color, errortype = "sd", allpoints = T,
+ggEasy.barplot.stat<-function(df, xval = 1, yval = 2, color = NA, shape = NA, group = color, errortype = "sd", allpoints = T,
                               error.width = 1, point.size = 1, alpha = 0.8, palette = wes_palette("Darjeeling1", ncolor, type = "continuous"),
                               lineweight.bar = 0.5, lineweight.error = lineweight.bar,
                               print = FALSE, outputName = "statBarPlot.pdf",print.width = 8, print.height = 6) {
@@ -62,7 +62,7 @@ ggEasy.barplot.stat<-function(df, xval = 1, yval = 2, color = 3, shape = NA, gro
   
   # adds group
   if (!is.na(group)) {
-    g <- g + aes(group = factor(df[,group])) 
+    g <- g + aes(group = factor(df[,group]))
   }
   # adds color and bars
   if (!is.na(color)) {   
@@ -73,8 +73,9 @@ ggEasy.barplot.stat<-function(df, xval = 1, yval = 2, color = 3, shape = NA, gro
       guides(fill = guide_legend(title = colnames(df)[color])) + 
       scale_fill_manual(values = palette)
   } else {
+    group <- NA
     ncolor <- 1
-    g <- g + stat_summary(fun="mean",position="dodge",geom="bar", width = error.width, alpha = alpha, 
+    g <- g + aes(group = df[,xval]) + stat_summary(fun="mean",position="dodge",geom="bar", width = error.width, alpha = alpha, 
                           color= "black", fill = palette, size = lineweight.bar)
   }
   # adds errorbars
@@ -85,17 +86,22 @@ ggEasy.barplot.stat<-function(df, xval = 1, yval = 2, color = 3, shape = NA, gro
   }
   # adds points
   if (allpoints == TRUE) {
-    if (is.na(shape)) {
-      g <- g + geom_point(aes(group = df[,group]), alpha = alpha, color = "black", size = point.size, 
+    if (is.na(shape) && is.na(group)) {
+      g <- g + geom_point(alpha = alpha, color = "black", size = point.size, 
+                          position=position_jitter(width = error.width/4))
+    } else if(is.na(shape) || is.na(group)) {
+      g <- g + geom_point(alpha = alpha, color = "black", size = point.size, 
                           position=position_jitterdodge(dodge.width = error.width, jitter.width = error.width/2))
     } else {
-      g <- g + geom_point(aes(group = df[,group], shape = factor(df[,shape])), alpha = alpha, color = "black", size = point.size, 
+      g <- g + geom_point(aes(shape = factor(df[,shape])), alpha = alpha, color = "black", size = point.size, 
                           position=position_jitterdodge(dodge.width = error.width, jitter.width = error.width/2)) + 
         guides(shape = guide_legend(title = colnames(df)[shape]))
     }
   }
+  
   if (print == TRUE) {
     ggsave(outputName, plot = g, width = print.width, height = print.height)
   }
   return(g)
 }
+
