@@ -58,14 +58,13 @@ ggEasy.barplot.stat<-function(df, xval = 1, yval = 2, color = NA, shape = NA, gr
   color <- ifelse(is.numeric(color), color, which(headers == color))
   shape <- ifelse(is.numeric(shape), shape, which(headers == shape))
   
-  
-  g <- ggplot(df,aes(x = factor(df[,xval]), y = as.numeric(df[,yval]))) + 
-    labs(x = colnames(df)[xval], y = colnames(df)[yval]) + theme_bw()
-  
   # adds filler column for NA purposes
   if (is.na(color) || is.na(group) || is.na(shape)) {
     df$FillerColor <- "filler"
   }
+  
+  g <- ggplot(df,aes(x = factor(df[,xval]), y = as.numeric(df[,yval]))) + 
+    labs(x = colnames(df)[xval], y = colnames(df)[yval]) + theme_bw()
   
   # adds color
   if (is.na(color)) {   # adds filler column for NA color
@@ -121,4 +120,3 @@ ggEasy.barplot.stat<-function(df, xval = 1, yval = 2, color = NA, shape = NA, gr
   }
   return(g)
 }
-
