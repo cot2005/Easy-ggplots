@@ -7,7 +7,9 @@
 library(ggplot2)
 library(wesanderson)
 ggEasy.scatter.stat<-function(df, xval = 1, yval = 2, color = 3, errortype = "sd", connectLine = FALSE, 
-                              error.width = 0.05, line.size = 0.5, point.size = 1,alpha = 0.8, palette = wes_palette("Darjeeling1", length(unique(df[,color])), type = "continuous"),
+                              error.width = 0.05, line.size = 0.5, point.size = 1,alpha = 0.8, 
+                              palette = wes_palette(palette.wes_palette, length(unique(df[,color])), type = "continuous"),
+                              palette.wes_palette = "Darjeeling1",
                               print = FALSE, outputName = "statScatterPlot.pdf", print.width = 8, print.height = 6) {
   df <- as.data.frame(df)
   # flexible inputs
@@ -47,7 +49,9 @@ ggEasy.scatter.stat<-function(df, xval = 1, yval = 2, color = 3, errortype = "sd
 #
 
 ggEasy.barplot.stat<-function(df, xval = 1, yval = 2, color = NA, shape = NA, group = color, errortype = "sd", allpoints = T,
-                              error.width = 1, point.size = 1, alpha = 0.8, palette = wes_palette("Darjeeling1", ncolor, type = "continuous"),
+                              error.width = 1, point.size = 1, alpha = 0.8, 
+                              palette = wes_palette(palette.wes_palette, length(unique(df[,color])), type = "continuous"),
+                              palette.wes_palette = "Darjeeling1",
                               lineweight.bar = 0.5, lineweight.error = lineweight.bar, bartype = "dodge",
                               print = FALSE, outputName = "statBarPlot.pdf",print.width = 8, print.height = 6) {
   df <- as.data.frame(df)
