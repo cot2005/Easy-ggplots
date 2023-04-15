@@ -10,7 +10,7 @@ ggEasy.histogram<-function(df, xval = 1, yaxis = "count", color = NA, sep = ",",
                            alpha = 0.5, binNum = 30, density.bars = FALSE, line.size = 0.25, 
                            palette = wes_palette(palette.wes_palette, length(unique(df[,color])), type = "continuous"),
                            palette.wes_palette = "Darjeeling1",
-                           outputName = "histogramPlot.pdf", print = FALSE, print.height = 5, print.width = 7) {
+                           outputName = "histogramPlot.pdf", print = FALSE, print.height = 6, print.width = 8) {
   df <- as.data.frame(df)
   # flexible inputs
   headers <- colnames(df)
