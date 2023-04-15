@@ -1,5 +1,5 @@
 # author: Colin Tang
-# simple function to make histogram plots from csv's (default) where
+# simple function to make histogram and density plots from dataframes where
 # each parameter number defines the column for the value.
 #
 
@@ -31,14 +31,17 @@ ggEasy.histogram<-function(df, xval = 1, yaxis = "count", color = NA, sep = ",",
     g <- g + geom_histogram(aes(y=..count..),  position="identity", 
                             alpha = alpha, size = line.size, color = "black",
                             binwidth = max(df[,xval], na.rm = T)/binNum)
-  } else {   # assumes density if not count
-    g <- g + geom_density(alpha=alpha, color = "black",
+  } else if (yaxis == "density") {   # assumes density if not count
+    g <- g + geom_density(aes(y = after_stat(density)), alpha=alpha, color = "black",
                           size = line.size)
     if (density.bars == TRUE) {
       g <- g + geom_histogram(aes(y=..density..), position="identity", 
                               color = "black", alpha=alpha, size = line.size, 
                               binwidth = max(df[,xval], na.rm = T)/binNum)
     }
+  } else {
+    g <- g + geom_density(aes(y = after_stat(scaled)), alpha=alpha, color = "black",
+                          size = line.size)
   }
   g <- g + theme_bw() + scale_x_continuous(breaks = scales::pretty_breaks(n = 8)) +
     xlab(headers[xval]) + 
