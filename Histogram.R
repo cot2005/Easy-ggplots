@@ -6,7 +6,7 @@
 library("ggplot2")
 library("wesanderson")
 
-ggEasy.histogram<-function(df, xval = 1, yaxis = "count", color = NA, sep = ",", legend = TRUE,
+ggEasy.histogram<-function(df, xval = 1, yaxis = "count", color = NA, legend = TRUE,
                            alpha = 0.5, binNum = 30, density.bars = FALSE, line.size = 0.25, 
                            palette = wes_palette(palette.wes_palette, length(unique(df[,color])), type = "continuous"),
                            palette.wes_palette = "Darjeeling1",
