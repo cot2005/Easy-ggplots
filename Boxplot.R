@@ -41,7 +41,7 @@ ggEasy.boxplot<-function(inputFile, xval = 1, yval = 2, shape = NULL, fill = NUL
     g <- g + theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
   }
   if (is.null(facetGroup) == FALSE) {   # adds facet wrapper
-    g <- g + facet_wrap(~get(colnames(df)[facetGroup])
+    g <- g + facet_wrap(~get(colnames(df)[facetGroup]))
   }
   print(g)
   ggsave(outputName, height = height, width = width)
