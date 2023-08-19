@@ -5,9 +5,9 @@
 # will perform an 3 parameter fitting if drc.upper is set to a number. will perform 4 parameter fitting if drc.upper is set to NA (default)
 # options for error.geom = pointrange (default), linerange, errorbar, NA
 
+library(dplyr)
 library(drc)
 library(ggplot2)
-library(dplyr)
 library(wesanderson)
 
 ggEasy.drc<-function(df, xval = 1, yval = 2, color = NA, group = NA, alpha = 0.8, linewidth = 0.5,
