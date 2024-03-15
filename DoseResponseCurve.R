@@ -6,6 +6,7 @@
 # options for error.geom = pointrange (default), linerange, errorbar, NA
 
 library(dplyr)
+library(MASS, exclude = c("select"))
 library(drc)
 library(ggplot2)
 library(wesanderson)
