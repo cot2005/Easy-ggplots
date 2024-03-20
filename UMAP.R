@@ -19,7 +19,7 @@ ggEasy.umap<-function(df, labelColumn = ncol(df), point.size = 2, alpha = 0.8, s
   # separates labels and gets stats
   labels <- df[,labelColumn]
   df <- df[,-labelColumn]
-  df <- matrix(as.numeric(df[,-labelColumn]), 
+  df <- matrix(df, 
                nrow = nrow(df), ncol = ncol(df), byrow = TRUE)
   numLabels <- length(unique(labels))
   shapeCol <- ifelse(numLabels > 3, NA, 3)
