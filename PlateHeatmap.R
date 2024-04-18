@@ -10,7 +10,7 @@ library(ggplot2)
 library(wesanderson)
 library(stringr)
 
-ggEasy.plateheatmap<-function(df, wellRow = 2, valueRow = 3, platetype = 96,
+ggEasy.plateheatmap<-function(df, platetype = 96, wellRow = 2, valueRow = 3,
                               point.weight = 0.25, wespalette = "Darjeeling1",
                               palette = wes_palette(wespalette, 3, type = "continuous"),
                               outputName = "platePlot.pdf", print = FALSE, print.height = 5, print.width = 7) {
