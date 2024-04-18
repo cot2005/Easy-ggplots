@@ -10,7 +10,8 @@ library(ggplot2)
 library(wesanderson)
 library(stringr)
 
-ggEasy.plateheatmap<-function(df, platetype = 96, wellRow = 2, valueRow = 3,
+
+ggEasy.plateheatmap<-function(df, platetype = 96,wellRow = 2, valueRow = 3,
                               point.weight = 0.25, wespalette = "Darjeeling1",
                               palette = wes_palette(wespalette, 3, type = "continuous"),
                               outputName = "platePlot.pdf", print = FALSE, print.height = 5, print.width = 7) {
@@ -21,7 +22,7 @@ ggEasy.plateheatmap<-function(df, platetype = 96, wellRow = 2, valueRow = 3,
   valueRow <- ifelse(is.numeric(valueRow), valueRow, which(header == valueRow))
   
   # trims df
-  colnames(df)[c(wellRow, valueRow)] <- c("well", "Signal")
+  colnames(df)[c(wellRow, valueRow)] <- c("well", "fillerSignal")
   df <- df %>% 
     mutate(row = str_extract(well, "[A-P]"), 
            column = as.numeric(str_extract(well, "[0-9]+")))  
@@ -44,14 +45,14 @@ ggEasy.plateheatmap<-function(df, platetype = 96, wellRow = 2, valueRow = 3,
     left_join(df, by = c("row", "column"))
   
   platePlot <- allData %>% 
-    ggplot(aes(x = column, y = row, fill = Signal)) + geom_point(size = 7, shape = 21, stroke=point.weight) + 
+    ggplot(aes(x = column, y = row, fill = fillerSignal)) + geom_point(size = 7, shape = 21, stroke=point.weight) + 
     scale_y_discrete(limits = rev) + 
     scale_x_continuous(position = "top", breaks = plate.breaks, limits = plate.lims) + 
     scale_fill_gradientn(colors = palette) + 
     theme_bw() + theme(panel.grid.minor = element_blank(), 
                        axis.title.x = element_blank(), 
-                       axis.title.y = element_blank())
-  # saves graph
+                       axis.title.y = element_blank()) +
+    labs(fill=header[valueRow])
   if (print) {
     ggsave(outputName, plot = platePlot, width = print.width, height = print.height)
   }
