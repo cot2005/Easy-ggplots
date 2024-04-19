@@ -11,7 +11,7 @@ library(wesanderson)
 library(stringr)
 
 
-ggEasy.plateheatmap<-function(df, platetype = 96,wellRow = 2, valueRow = 3,
+ggEasy.plateheatmap<-function(df, platetype = 96,wellRow = 2, valueRow = 3, wellShape = 21,
                               point.weight = 0.25, wespalette = "Darjeeling1",
                               palette = wes_palette(wespalette, 3, type = "continuous"),
                               outputName = "platePlot.pdf", print = FALSE, print.height = 5, print.width = 7) {
@@ -45,11 +45,11 @@ ggEasy.plateheatmap<-function(df, platetype = 96,wellRow = 2, valueRow = 3,
     left_join(df, by = c("row", "column"))
   
   platePlot <- allData %>% 
-    ggplot(aes(x = column, y = row, fill = fillerSignal)) + geom_point(size = 7, shape = 21, stroke=point.weight) + 
+    ggplot(aes(x = column, y = row, fill = fillerSignal)) + geom_point(size = 7, shape = wellShape, stroke=point.weight) + 
     scale_y_discrete(limits = rev) + 
     scale_x_continuous(position = "top", breaks = plate.breaks, limits = plate.lims) + 
     scale_fill_gradientn(colors = palette) + 
-    theme_bw() + theme(panel.grid.minor = element_blank(), 
+    theme_bw() + theme(panel.grid.minor = element_blank(),
                        axis.title.x = element_blank(), 
                        axis.title.y = element_blank()) +
     labs(fill=header[valueRow])
