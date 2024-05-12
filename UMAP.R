@@ -1,11 +1,12 @@
+
 library(umap)
 library(ggplot2)
 library(wesanderson)
 
 ggEasy.umap<-function(df, labelColumn = ncol(df), point.size = 2, alpha = 0.8, subsample = NA, 
-         palette = wes_palette("Darjeeling1", numLabels, type = "continuous"),
-         n_neighbors = 15, min_distance = 0.1,
-         print = FALSE, outputName = "umap.pdf", print.width = 7, print.height = 6) {
+                      palette = wes_palette("Darjeeling1", numLabels, type = "continuous"),
+                      n_neighbors = 15, min_distance = 0.1,
+                      print = FALSE, outputName = "umap.pdf", print.width = 7, print.height = 6) {
   # subsets data
   if (is.numeric(subsample)) {
     subrows <- sample(1:nrow(df), subsample)
@@ -19,11 +20,10 @@ ggEasy.umap<-function(df, labelColumn = ncol(df), point.size = 2, alpha = 0.8, s
   # separates labels and gets stats
   labels <- df[,labelColumn]
   df <- df[,-labelColumn]
-  df <- matrix(df, 
-               nrow = nrow(df), ncol = ncol(df), byrow = TRUE)
+  df <- as.matrix(as.data.frame(df))
   numLabels <- length(unique(labels))
   shapeCol <- ifelse(numLabels > 3, NA, 3)
-
+  
   # performs clustering
   custom.config <- umap.defaults
   custom.config$n_neighbors <- n_neighbors
@@ -49,4 +49,3 @@ ggEasy.umap<-function(df, labelColumn = ncol(df), point.size = 2, alpha = 0.8, s
   }
   return(g)
 }
-
