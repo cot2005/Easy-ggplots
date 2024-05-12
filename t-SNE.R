@@ -3,7 +3,7 @@ library(ggplot2)
 library(wesanderson)
 
 ggEasy.tsne<-function(df, labelColumn = ncol(df), max_iter = 500, exaggeration_factor = 50, perplexity = 30,
-                      learning = 200, subsample = 10000, point.size = 2, alpha = 0.8,
+                      learning = 200, subsample = NA, point.size = 2, alpha = 0.8,
                       palette =  wes_palette("Darjeeling1", numLabels, type = "continuous"),
                       outputName = "tsne.pdf", print = FALSE, print.height = 5, print.width = 6) {
   # subsets data
