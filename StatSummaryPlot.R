@@ -114,7 +114,7 @@ ggEasy.barplot.stat<-function(df, xval = 1, yval = 2, color = NA, shape = NA, gr
                             position=position_jitterdodge(dodge.width = error.width, jitter.width = error.width/2)) + 
           guides(shape = guide_legend(title = colnames(df)[shape]))
         if (length(unique(df[,shape])) > 6) {
-          g <- g + scale_shape_manual(values=seq(0,length(unique(df[,shape]))))
+          g <- g + scale_shape_manual(values=seq(15,(15 + length(unique(df[,shape])))))
         }
       }
     }
