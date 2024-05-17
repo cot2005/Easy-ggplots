@@ -5,7 +5,7 @@ library(wesanderson)
 
 ggEasy.umap<-function(df, labelColumn = ncol(df), point.size = 2, alpha = 0.8, subsample = NA, 
                       palette = wes_palette("Darjeeling1", numLabels, type = "continuous"),
-                      n_neighbors = 15, min_distance = 0.1,
+                      n_neighbors = 15, min_distance = 0.1, returnDF = FALSE,
                       print = FALSE, outputName = "umap.pdf", print.width = 7, print.height = 6) {
   # subsets data
   if (is.numeric(subsample)) {
@@ -47,5 +47,9 @@ ggEasy.umap<-function(df, labelColumn = ncol(df), point.size = 2, alpha = 0.8, s
   if (print == TRUE) {
     ggsave(outputName, plot = g, width = print.width, height = print.height)
   }
-  return(g)
+  if (returnDF) {
+    return(list(g, umap.df))
+  } else {
+    return(g)
+  }
 }
