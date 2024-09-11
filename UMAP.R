@@ -2,10 +2,13 @@
 library(umap)
 library(ggplot2)
 library(wesanderson)
+library(ggrepel)
+library(dplyr)
 
 ggEasy.umap<-function(df, labelColumn = ncol(df), point.size = 2, alpha = 0.8, subsample = NA, 
                       palette = wes_palette("Darjeeling1", numLabels, type = "continuous"),
-                      n_neighbors = 15, min_distance = 0.1, returnDF = FALSE,
+                      n_neighbors = 15, min_distance = 0.1, returnDF = FALSE, 
+                      clusterLabel = FALSE, labelSize = 3, removeGrid = TRUE,
                       print = FALSE, outputName = "umap.pdf", print.width = 7, print.height = 6) {
   # subsets data
   if (is.numeric(subsample)) {
@@ -22,7 +25,6 @@ ggEasy.umap<-function(df, labelColumn = ncol(df), point.size = 2, alpha = 0.8, s
   df <- df[,-labelColumn]
   df <- as.matrix(as.data.frame(df))
   numLabels <- length(unique(labels))
-  shapeCol <- ifelse(numLabels > 3, NA, 3)
   
   # performs clustering
   custom.config <- umap.defaults
@@ -39,11 +41,26 @@ ggEasy.umap<-function(df, labelColumn = ncol(df), point.size = 2, alpha = 0.8, s
   umap.max <- umap.max * ifelse(umap.max > 0, 1.1, 0.9)
   umap.min <- min(combinedValues) * 0.9
   umap.min <- umap.min * ifelse(umap.min < 0, 1.1, 0.9)
+  
   #performs plotting
-  g <- ggEasy.scatter(umap.df, xval = 1, yval = 2, color = 3, shape = shapeCol, point.size = point.size, 
-                      alpha = alpha, palette = palette) + coord_cartesian(xlim = c(umap.min,umap.max), ylim = c(umap.min,umap.max)) + 
-    theme(panel.border = element_blank(), panel.grid.major = element_blank(),
-          panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))
+  g <- ggplot(umap.df, aes(UMAP1, UMAP2, color = Label)) + 
+    geom_point(size = point.size, alpha = alpha) + 
+    theme_bw() + scale_color_manual(values = palette)
+  
+  # removes grid
+  if (removeGrid) {
+    g <- g + theme(panel.border = element_blank(), panel.grid.major = element_blank(), 
+                   panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))
+  }
+  
+  # adds cluster labels
+  if (clusterLabel) {
+    labelDF <- umap.df %>% 
+      group_by(Label) %>% 
+      slice_sample(n = 1)
+    g <- g + geom_label_repel(data = labelDF, aes(x = UMAP1, y = UMAP2, label = Label), size = labelSize)
+  }
+  
   if (print == TRUE) {
     ggsave(outputName, plot = g, width = print.width, height = print.height)
   }
